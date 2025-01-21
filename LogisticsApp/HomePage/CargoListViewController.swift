@@ -28,7 +28,6 @@ class CargoListViewController: UIViewController {
     }
 }
 
-// Table view data source and delegate
 extension CargoListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

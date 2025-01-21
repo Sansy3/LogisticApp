@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C1A5EDA52D3BE2B5007E3F74 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EDA42D3BE2B5007E3F74 /* GoogleSignIn */; };
+		C1A5EDA72D3BE2B5007E3F74 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EDA62D3BE2B5007E3F74 /* GoogleSignInSwift */; };
+		C1A5EDDE2D3BFBBC007E3F74 /* GoogleAPIClientForRESTCore in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EDDD2D3BFBBC007E3F74 /* GoogleAPIClientForRESTCore */; };
+		C1A5EDE02D3BFBBC007E3F74 /* GoogleAPIClientForREST_ACMEDNS in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EDDF2D3BFBBC007E3F74 /* GoogleAPIClientForREST_ACMEDNS */; };
+		C1A5EDE22D3BFBBC007E3F74 /* GoogleAPIClientForREST_AIPlatformNotebooks in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EDE12D3BFBBC007E3F74 /* GoogleAPIClientForREST_AIPlatformNotebooks */; };
+		C1A5EDE42D3BFBBC007E3F74 /* GoogleAPIClientForREST_APIGateway in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EDE32D3BFBBC007E3F74 /* GoogleAPIClientForREST_APIGateway */; };
+		C1A5EDE62D3BFBBC007E3F74 /* GoogleAPIClientForREST_APIManagement in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EDE52D3BFBBC007E3F74 /* GoogleAPIClientForREST_APIManagement */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		C12025D12D37FAB900B453B5 /* LogisticsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LogisticsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1E37DC02D382C54006DDA7A /* LogisticsApp copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LogisticsApp copy-Info.plist"; path = "/Users/beqa/Desktop/LogisticApp/LogisticsApp/LogisticsApp copy-Info.plist"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +47,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1A5EDA52D3BE2B5007E3F74 /* GoogleSignIn in Frameworks */,
+				C1A5EDE62D3BFBBC007E3F74 /* GoogleAPIClientForREST_APIManagement in Frameworks */,
+				C1A5EDE42D3BFBBC007E3F74 /* GoogleAPIClientForREST_APIGateway in Frameworks */,
+				C1A5EDDE2D3BFBBC007E3F74 /* GoogleAPIClientForRESTCore in Frameworks */,
+				C1A5EDE22D3BFBBC007E3F74 /* GoogleAPIClientForREST_AIPlatformNotebooks in Frameworks */,
+				C1A5EDA72D3BE2B5007E3F74 /* GoogleSignInSwift in Frameworks */,
+				C1A5EDE02D3BFBBC007E3F74 /* GoogleAPIClientForREST_ACMEDNS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				C12025D32D37FAB900B453B5 /* LogisticsApp */,
+				C1E37DC02D382C54006DDA7A /* LogisticsApp copy-Info.plist */,
 				C12025D22D37FAB900B453B5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -78,6 +97,13 @@
 			);
 			name = LogisticsApp;
 			packageProductDependencies = (
+				C1A5EDA42D3BE2B5007E3F74 /* GoogleSignIn */,
+				C1A5EDA62D3BE2B5007E3F74 /* GoogleSignInSwift */,
+				C1A5EDDD2D3BFBBC007E3F74 /* GoogleAPIClientForRESTCore */,
+				C1A5EDDF2D3BFBBC007E3F74 /* GoogleAPIClientForREST_ACMEDNS */,
+				C1A5EDE12D3BFBBC007E3F74 /* GoogleAPIClientForREST_AIPlatformNotebooks */,
+				C1A5EDE32D3BFBBC007E3F74 /* GoogleAPIClientForREST_APIGateway */,
+				C1A5EDE52D3BFBBC007E3F74 /* GoogleAPIClientForREST_APIManagement */,
 			);
 			productName = LogisticsApp;
 			productReference = C12025D12D37FAB900B453B5 /* LogisticsApp.app */;
@@ -107,6 +133,10 @@
 			);
 			mainGroup = C12025C82D37FAB900B453B5;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C1A5EDA32D3BE2B5007E3F74 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				C1A5EDDC2D3BFBBC007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C12025D22D37FAB900B453B5 /* Products */;
 			projectDirPath = "";
@@ -337,6 +367,63 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C1A5EDA32D3BE2B5007E3F74 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+		C1A5EDDC2D3BFBBC007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/google-api-objectivec-client-for-rest.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C1A5EDA42D3BE2B5007E3F74 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1A5EDA32D3BE2B5007E3F74 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		C1A5EDA62D3BE2B5007E3F74 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1A5EDA32D3BE2B5007E3F74 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		C1A5EDDD2D3BFBBC007E3F74 /* GoogleAPIClientForRESTCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1A5EDDC2D3BFBBC007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
+			productName = GoogleAPIClientForRESTCore;
+		};
+		C1A5EDDF2D3BFBBC007E3F74 /* GoogleAPIClientForREST_ACMEDNS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1A5EDDC2D3BFBBC007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
+			productName = GoogleAPIClientForREST_ACMEDNS;
+		};
+		C1A5EDE12D3BFBBC007E3F74 /* GoogleAPIClientForREST_AIPlatformNotebooks */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1A5EDDC2D3BFBBC007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
+			productName = GoogleAPIClientForREST_AIPlatformNotebooks;
+		};
+		C1A5EDE32D3BFBBC007E3F74 /* GoogleAPIClientForREST_APIGateway */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1A5EDDC2D3BFBBC007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
+			productName = GoogleAPIClientForREST_APIGateway;
+		};
+		C1A5EDE52D3BFBBC007E3F74 /* GoogleAPIClientForREST_APIManagement */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1A5EDDC2D3BFBBC007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
+			productName = GoogleAPIClientForREST_APIManagement;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C12025C92D37FAB900B453B5 /* Project object */;
 }
