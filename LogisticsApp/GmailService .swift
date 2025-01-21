@@ -5,11 +5,7 @@
 ////  Created by beqa on 18.01.25.
 ////
 //
-//import GoogleAPIClientForRESTCore
-//import GoogleAPIClientForREST_ACMEDNS
-//import GoogleAPIClientForREST_APIGateway
-//import GoogleAPIClientForREST_APIManagement
-//import GoogleAPIClientForREST_AIPlatformNotebooks
+//import GoogleAPIClientForREST/gmai
 //import GoogleSignIn
 //
 //class GmailService {

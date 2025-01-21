@@ -17,7 +17,6 @@ struct Cargo {
 
 class CargoService {
     func getAllCargos() -> [Cargo] {
-        // Placeholder data, typically fetched from Firebase or Gmail API
         return [
             Cargo(id: "1", description: "Cargo 1", status: "In Transit", location: "New York", assignedDriver: "Driver A"),
             Cargo(id: "2", description: "Cargo 2", status: "Delivered", location: "Chicago", assignedDriver: "Driver B")
