@@ -5,6 +5,7 @@ struct Driver {
     let lastName: String
     let truckType: String
     let location: CLLocationCoordinate2D
+
 }
 
 class DriverData {

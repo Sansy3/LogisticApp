@@ -7,7 +7,7 @@ class SignInViewController: UIViewController {
     
     let emailTextField = UITextField()
     let passwordTextField = UITextField()
-    let nameTextField = UITextField() // Name input for sign-up only
+    let nameTextField = UITextField() 
     let actionButton = UIButton(type: .system)
     let toggleButton = UIButton(type: .system)
     
@@ -104,7 +104,6 @@ class SignInViewController: UIViewController {
         }
     }
     
-    // Action to toggle between Sign In and Sign Up mode
     @objc func toggleButtonTapped() {
         isSignUpMode.toggle()
         actionButton.setTitle(isSignUpMode ? "Sign Up" : "Sign In", for: .normal)

@@ -105,7 +105,6 @@ class AccountViewController: UIViewController {
                     let data = document.data()
                     self?.nameLabel.text = data?["name"] as? String ?? "Unknown Name"
                     self?.emailLabel.text = data?["email"] as? String ?? "Unknown Email"
-                    // Optional: If you store a profile image URL in Firestore
                     if let imageURL = data?["profileImageURL"] as? String, let url = URL(string: imageURL) {
                         DispatchQueue.global().async {
                             if let data = try? Data(contentsOf: url) {
@@ -123,7 +122,7 @@ class AccountViewController: UIViewController {
             // Default case (not signed in)
             nameLabel.text = "Not Logged In"
             emailLabel.text = ""
-            profileImageView.image = UIImage(systemName: "person.circle")
+            profileImageView.image = UIImage(named: "gogona")
             profileImageView.tintColor = .white
         }
     }
