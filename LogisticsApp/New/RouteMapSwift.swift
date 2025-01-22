@@ -1,6 +1,5 @@
 import SwiftUI
 import MapKit
-
 struct MapView: UIViewControllerRepresentable {
     var origin: CLLocationCoordinate2D
     var destination: CLLocationCoordinate2D
@@ -9,8 +8,7 @@ struct MapView: UIViewControllerRepresentable {
         return MKMapViewController(origin: origin, destination: destination)
     }
 
-    func updateUIViewController(_ uiViewController: MKMapViewController, context: Context) {
-    }
+    func updateUIViewController(_ uiViewController: MKMapViewController, context: Context) {}
 }
 
 class MKMapViewController: UIViewController, MKMapViewDelegate {
@@ -40,7 +38,7 @@ class MKMapViewController: UIViewController, MKMapViewDelegate {
         let region = MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: (origin.latitude + destination.latitude) / 2,
                                             longitude: (origin.longitude + destination.longitude) / 2),
-            span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
+            span: MKCoordinateSpan(latitudeDelta: 5.0, longitudeDelta: 5.0)
         )
         mapView.setRegion(region, animated: true)
 
@@ -68,11 +66,6 @@ class MKMapViewController: UIViewController, MKMapViewDelegate {
             guard let route = response?.routes.first else { return }
             self?.mapView.addOverlay(route.polyline)
         }
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        mapView.frame = self.view.bounds
     }
 
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {

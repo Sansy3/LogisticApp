@@ -12,7 +12,7 @@ class LoadboardViewController: UIViewController {
         
         setupUI()
         bindViewModel()
-        viewModel.loadDummyData()
+        viewModel.fetchLoadData()
     }
 
     private func setupUI() {
@@ -57,8 +57,6 @@ extension LoadboardViewController: UITableViewDelegate {
         let selectedLoad = viewModel.loadItems[indexPath.row]
         let detailView = DetailLoadView(loadItem: selectedLoad)
         let hostingController = UIHostingController(rootView: detailView)
-
-   
         hostingController.modalPresentationStyle = .fullScreen
         present(hostingController, animated: true, completion: nil)
     }
