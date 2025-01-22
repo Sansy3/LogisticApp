@@ -24,13 +24,13 @@
 		C1A5EE292D40154F007E3F74 /* GoogleAPIClientForREST_APIGateway in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE282D40154F007E3F74 /* GoogleAPIClientForREST_APIGateway */; };
 		C1A5EE2B2D40154F007E3F74 /* GoogleAPIClientForREST_APIManagement in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE2A2D40154F007E3F74 /* GoogleAPIClientForREST_APIManagement */; };
 		C1A5EE2D2D401578007E3F74 /* GoogleAPIClientForREST_Gmail in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE2C2D401578007E3F74 /* GoogleAPIClientForREST_Gmail */; };
-		C1C169EA2D41651200C33298 /* NetowrkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C169E92D41651000C33298 /* NetowrkManager.swift */; };
+		C1C169EA2D41651200C33298 /* NetworkM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C169E92D41651000C33298 /* NetworkM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C12025D12D37FAB900B453B5 /* LogisticsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LogisticsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1A5EE112D400EEC007E3F74 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		C1C169E92D41651000C33298 /* NetowrkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetowrkManager.swift; sourceTree = "<group>"; };
+		C1C169E92D41651000C33298 /* NetworkM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkM.swift; sourceTree = "<group>"; };
 		C1E37DC02D382C54006DDA7A /* LogisticsApp copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LogisticsApp copy-Info.plist"; path = "/Users/beqa/Desktop/LogisticApp/LogisticsApp/LogisticsApp copy-Info.plist"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -85,7 +85,7 @@
 		C12025C82D37FAB900B453B5 = {
 			isa = PBXGroup;
 			children = (
-				C1C169E92D41651000C33298 /* NetowrkManager.swift */,
+				C1C169E92D41651000C33298 /* NetworkM.swift */,
 				C1A5EE112D400EEC007E3F74 /* GoogleService-Info.plist */,
 				C12025D32D37FAB900B453B5 /* LogisticsApp */,
 				C1E37DC02D382C54006DDA7A /* LogisticsApp copy-Info.plist */,
@@ -205,7 +205,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1C169EA2D41651200C33298 /* NetowrkManager.swift in Sources */,
+				C1C169EA2D41651200C33298 /* NetworkM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

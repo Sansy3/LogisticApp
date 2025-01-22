@@ -8,7 +8,7 @@ class LoadboardCell: UITableViewCell {
     private let routeLabel = UILabel()
     private let statusLabel = UILabel()
     private let truckTypeLabel = UILabel()
-    private let truckImageView = UIImageView()
+    private let truckTypeImageView = UIImageView()  // New Image View
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -20,7 +20,7 @@ class LoadboardCell: UITableViewCell {
     }
 
     private func setupUI() {
-        containerView.backgroundColor = UIColor.systemGray6
+        containerView.backgroundColor = UIColor(named: "deepBlue")  // Using asset color
         containerView.layer.cornerRadius = 12
         containerView.layer.shadowColor = UIColor.black.cgColor
         containerView.layer.shadowOpacity = 0.1
@@ -29,29 +29,30 @@ class LoadboardCell: UITableViewCell {
         containerView.translatesAutoresizingMaskIntoConstraints = false
 
         companyLabel.font = .boldSystemFont(ofSize: 16)
-        companyLabel.textColor = .label
+        companyLabel.textColor = UIColor(named: "SofGreen")  // Using asset color
 
         routeLabel.font = .systemFont(ofSize: 14)
-        routeLabel.textColor = .secondaryLabel
+        routeLabel.textColor = UIColor(named: "SofGreen")  // Using asset color
 
         statusLabel.font = .systemFont(ofSize: 14)
-        statusLabel.textColor = .systemBlue
+        statusLabel.textColor = UIColor(named: "SofGreen")  // Using asset color
 
         truckTypeLabel.font = .systemFont(ofSize: 14)
-        truckTypeLabel.textColor = .secondaryLabel
+        truckTypeLabel.textColor = UIColor(named: "SofGreen")  // Using asset color
 
-        truckImageView.contentMode = .scaleAspectFit
-        truckImageView.translatesAutoresizingMaskIntoConstraints = false
-        truckImageView.layer.cornerRadius = 10
+        // Configuring truckTypeImageView
+        truckTypeImageView.contentMode = .scaleAspectFit
+        truckTypeImageView.translatesAutoresizingMaskIntoConstraints = false
 
         let stackView = UIStackView(arrangedSubviews: [companyLabel, routeLabel, statusLabel, truckTypeLabel])
         stackView.axis = .vertical
         stackView.spacing = 8
         stackView.translatesAutoresizingMaskIntoConstraints = false
 
-        contentView.addSubview(containerView)
         containerView.addSubview(stackView)
-        containerView.addSubview(truckImageView)
+        containerView.addSubview(truckTypeImageView)  // Adding Image View
+
+        contentView.addSubview(containerView)
 
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
@@ -62,11 +63,12 @@ class LoadboardCell: UITableViewCell {
             stackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12),
             stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12),
             stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: truckTypeImageView.leadingAnchor, constant: -8),
 
-            truckImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            truckImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-            truckImageView.widthAnchor.constraint(equalToConstant: 60),
-            truckImageView.heightAnchor.constraint(equalToConstant: 60)
+            truckTypeImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            truckTypeImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            truckTypeImageView.widthAnchor.constraint(equalToConstant: 40),
+            truckTypeImageView.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
 
@@ -75,28 +77,23 @@ class LoadboardCell: UITableViewCell {
         routeLabel.text = "\(item.origin) → \(item.destination)"
         statusLabel.text = item.status.uppercased()
         truckTypeLabel.text = "Truck Type: \(item.truckType)"
-        
-        // Assign appropriate image based on TruckType
-        let truckType = item.truckType.lowercased()
+
+        // Set image based on truckType
         let imageName: String
-
-        switch truckType {
-        case "small straight":
-            imageName = "small_straight_icon"
-        case "large straight":
-            imageName = "large_straight_icon"
-        case "van":
-            imageName = "van_icon"
-        case "cargo van":
-            imageName = "cargo_van_icon"
-        case "tractor":
-            imageName = "tractor_icon"
+        switch item.truckType {
+        case "Small Straight":
+            imageName = "small_straight"
+        case "Large Straight":
+            imageName = "large_straight"
+        case "Van":
+            imageName = "van"
+        case "Cargo VAN":
+            imageName = "cargo_van"
+        case "Trackor":
+            imageName = "tractor"
         default:
-            imageName = "default_icon"
+            imageName = "default_image"  // Provide a default image
         }
-
-        truckImageView.image = UIImage(named: imageName)
+        truckTypeImageView.image = UIImage(named: imageName)
     }
 }
-
-
