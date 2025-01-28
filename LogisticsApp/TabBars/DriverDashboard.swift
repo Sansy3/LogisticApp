@@ -4,7 +4,7 @@ import FirebaseFirestore
 import FirebaseAuth
 
 class DriverTabBarController: UITabBarController, CLLocationManagerDelegate {
-    
+
     private var locationManager: CLLocationManager!
     private var currentLocation: CLLocation?
     private var firestore: Firestore!
@@ -12,7 +12,7 @@ class DriverTabBarController: UITabBarController, CLLocationManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         firestore = Firestore.firestore()
         
         // Get the current user ID
