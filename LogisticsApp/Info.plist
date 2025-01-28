@@ -14,6 +14,12 @@
         </dict>
     </array>
 
+    <!-- Location Permissions -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to share with dispatchers and for navigation purposes.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to share with dispatchers and for navigation purposes even when the app is in the background.</string>
+
     <!-- Existing configurations for the app -->
     <key>UIApplicationSceneManifest</key>
     <dict>
