@@ -29,7 +29,6 @@ class CustomTabBarController: UITabBarController {
 
         viewControllers = [loadboardVC, shipmentsVC, trucksVC, mapVC, accountVC]
 
-        // Apply gradient background to the TabBar
         let gradient = CAGradientLayer()
         gradient.colors = [UIColor.systemBlue.cgColor, UIColor.systemPurple.cgColor]
         gradient.frame = tabBar.bounds
