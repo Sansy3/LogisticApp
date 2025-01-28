@@ -39,11 +39,13 @@ class MapVC: UIViewController, MKMapViewDelegate {
                 let driverId = document.documentID
                 let latitude = document.get("latitude") as? CLLocationDegrees ?? 0.0
                 let longitude = document.get("longitude") as? CLLocationDegrees ?? 0.0
-                
                 let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
                 
-                // Update or add the annotation for this driver
-                self.updateDriverAnnotation(driverId: driverId, coordinate: coordinate)
+                // Fetch the driver's name from Firestore
+                self.fetchDriverName(driverId: driverId) { name in
+                    // Update or add the annotation for this driver with their name
+                    self.updateDriverAnnotation(driverId: driverId, name: name, coordinate: coordinate)
+                }
             }
             
             // After handling all the changes, update the map region to show all drivers
@@ -51,14 +53,29 @@ class MapVC: UIViewController, MKMapViewDelegate {
         }
     }
     
+    // Fetch the driver's name from Firestore
+    func fetchDriverName(driverId: String, completion: @escaping (String) -> Void) {
+        db.collection("users").document(driverId).getDocument { document, error in
+            if let error = error {
+                print("Error fetching driver name: \(error.localizedDescription)")
+                completion("Unknown Driver")  // Default to "Unknown Driver" if there's an error
+            } else if let document = document, document.exists, let name = document.get("name") as? String {
+                completion(name)  // Return the name if found
+            } else {
+                completion("Unknown Driver")  // If no name is found, return "Unknown Driver"
+            }
+        }
+    }
+    
     // Update or add a driver's annotation on the map
-    func updateDriverAnnotation(driverId: String, coordinate: CLLocationCoordinate2D) {
+    func updateDriverAnnotation(driverId: String, name: String, coordinate: CLLocationCoordinate2D) {
         if let existingAnnotation = driverAnnotations[driverId] {
             existingAnnotation.coordinate = coordinate
+            existingAnnotation.title = name  // Use the name instead of the ID
         } else {
             let newAnnotation = MKPointAnnotation()
             newAnnotation.coordinate = coordinate
-            newAnnotation.title = "Driver \(driverId)"  // You can modify this to include the driver's name
+            newAnnotation.title = name  // Set the title to the driver's name
             mapView.addAnnotation(newAnnotation)
             driverAnnotations[driverId] = newAnnotation
         }
