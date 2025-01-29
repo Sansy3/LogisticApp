@@ -26,19 +26,36 @@ struct TruckDimensions: Equatable {
     }
 }
 
+import Foundation
+
 enum AppError: LocalizedError {
+    case locationServiceDisabled
+    case locationPermissionDenied
     case networkError
     case parsingError
     case unknownError
+    case databaseError(String)
     
     var errorDescription: String? {
         switch self {
+        case .locationServiceDisabled:
+            return "Location services are disabled. Please enable them in Settings."
+        case .locationPermissionDenied:
+            return "Location permission denied. Please enable location access in Settings."
         case .networkError:
             return "Network connection error. Please check your internet connection."
         case .parsingError:
             return "Error processing data. Please try again."
         case .unknownError:
             return "An unexpected error occurred. Please try again."
+        case .databaseError(let message):
+            return "Database error: \(message)"
         }
     }
 }
+
+extension Notification.Name {
+    static let locationDidUpdate = Notification.Name("locationDidUpdate")
+    static let locationUpdateError = Notification.Name("locationUpdateError")
+}
+
