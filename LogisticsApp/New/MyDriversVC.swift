@@ -1,86 +1,218 @@
 import UIKit
 
-class MyDriversVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class DriversViewController: UIViewController {
+    // MARK: - Properties
+    private let viewModel: DriversViewModelProtocol
+    private let searchController = UISearchController(searchResultsController: nil)
     
-    var viewModel: MyDriversViewModel!
-    var tableView: UITableView!
-
+    // MARK: - UI Components
+    private lazy var tableView: UITableView = {
+        let table = UITableView()
+        table.backgroundColor = .systemGroupedBackground
+        table.separatorStyle = .none
+        table.delegate = self
+        table.dataSource = self
+        table.register(DriverCell.self, forCellReuseIdentifier: DriverCell.identifier)
+        table.refreshControl = UIRefreshControl()
+        table.refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        table.translatesAutoresizingMaskIntoConstraints = false
+        return table
+    }()
+    
+    private lazy var loadingSpinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.hidesWhenStopped = true
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        return spinner
+    }()
+    
+    private lazy var emptyStateLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No drivers found"
+        label.textAlignment = .center
+        label.textColor = .systemGray
+        label.font = .systemFont(ofSize: 17)
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    // MARK: - Initialization
+    init(viewModel: DriversViewModelProtocol = DriversViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.title = "My Drivers"
-        viewModel = MyDriversViewModel()
-        setupTableView()
+        setupUI()
+        setupSearchController()
         bindViewModel()
-        viewModel.loadDrivers()
+        viewModel.listenToDrivers()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        viewModel.stopListening()
+    }
+    
+    // MARK: - UI Setup
+    private func setupUI() {
+        title = "My Drivers"
+        view.backgroundColor = .systemGroupedBackground
         
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addDriver))
-        navigationItem.rightBarButtonItem = addButton
-    }
-    
-    func setupTableView() {
-        tableView = UITableView(frame: view.bounds, style: .plain)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DriverCell")
-        tableView.delegate = self
-        tableView.dataSource = self
         view.addSubview(tableView)
+        view.addSubview(loadingSpinner)
+        view.addSubview(emptyStateLabel)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            loadingSpinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingSpinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            emptyStateLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyStateLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
     
-    func bindViewModel() {
-        viewModel.reloadData = { [weak self] in
-            self?.tableView.reloadData()
+    private func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search drivers or truck types"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+    }
+    
+    private func bindViewModel() {
+        viewModel.onStateChanged = { [weak self] state in
+            DispatchQueue.main.async {
+                self?.handleState(state)
+            }
         }
     }
     
+    // MARK: - State Handling
+    private func handleState(_ state: LoadingState) {
+        switch state {
+        case .idle:
+            loadingSpinner.stopAnimating()
+            
+        case .loading:
+            loadingSpinner.startAnimating()
+            emptyStateLabel.isHidden = true
+            tableView.refreshControl?.endRefreshing()
+            
+        case .loaded:
+            loadingSpinner.stopAnimating()
+            tableView.refreshControl?.endRefreshing()
+            tableView.reloadData()
+            emptyStateLabel.isHidden = !viewModel.drivers.isEmpty
+            
+        case .error(let message):
+            loadingSpinner.stopAnimating()
+            tableView.refreshControl?.endRefreshing()
+            showError(message)
+        }
+    }
+    
+    // MARK: - Actions
+    @objc private func refreshData() {
+        viewModel.refreshData()
+    }
+    
+    private func showError(_ message: String) {
+        let alert = UIAlertController(
+            title: "Error",
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Retry", style: .default) { [weak self] _ in
+            self?.viewModel.refreshData()
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
+    }
+}
+
+// MARK: - UITableViewDelegate & UITableViewDataSource
+extension DriversViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.drivers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DriverCell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: DriverCell.identifier,
+            for: indexPath
+        ) as? DriverCell else {
+            return UITableViewCell()
+        }
+        
         let driver = viewModel.drivers[indexPath.row]
-        cell.textLabel?.text = "\(driver.firstName) \(driver.lastName) - \(driver.truckType)"
+        cell.configure(with: driver)
         return cell
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
     
-    @objc func addDriver() {
-        
-        let alert = UIAlertController(title: "Add Driver", message: "Enter driver details", preferredStyle: .alert)
-        
-        alert.addTextField { textField in
-            textField.placeholder = "First Name"
-        }
-        alert.addTextField { textField in
-            textField.placeholder = "Last Name"
-        }
-        alert.addTextField { textField in
-            textField.placeholder = "Truck Type"
-        }
-        alert.addTextField { textField in
-            textField.placeholder = "Latitude"
-        }
-        alert.addTextField { textField in
-            textField.placeholder = "Longitude"
-        }
-        
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        
-        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { [weak self] _ in
-            guard let self = self else { return }
-            
-            if let firstName = alert.textFields?[0].text,
-               let lastName = alert.textFields?[1].text,
-               let truckType = alert.textFields?[2].text,
-               let latitudeString = alert.textFields?[3].text,
-               let longitudeString = alert.textFields?[4].text,
-               let latitude = Double(latitudeString),
-               let longitude = Double(longitudeString) {
-                
-                self.viewModel.addDriver(firstName: firstName, lastName: lastName, truckType: truckType, latitude: latitude, longitude: longitude)
-            }
-        }))
-        
-        present(alert, animated: true)
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 120
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Handle driver selection - you can add navigation to driver details here
+        let driver = viewModel.drivers[indexPath.row]
+        // Example: navigationController?.pushViewController(DriverDetailsVC(driver: driver), animated: true)
     }
 }
+
+// MARK: - UISearchResultsUpdating
+extension DriversViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text else { return }
+        viewModel.filterDrivers(searchText: searchText)
+    }
+}
+
+// MARK: - Preview Provider
+#if DEBUG
+import SwiftUI
+
+struct DriversViewController_Preview: PreviewProvider {
+    static var previews: some View {
+        // Create a UIKit view controller wrapper for SwiftUI preview
+        UIViewControllerPreview {
+            let navigationController = UINavigationController(
+                rootViewController: DriversViewController()
+            )
+            return navigationController
+        }
+    }
+}
+
+// Helper struct for UIViewController previews
+struct UIViewControllerPreview<ViewController: UIViewController>: UIViewControllerRepresentable {
+    let viewController: ViewController
+    
+    init(_ builder: @escaping () -> ViewController) {
+        viewController = builder()
+    }
+    
+    func makeUIViewController(context: Context) -> ViewController {
+        viewController
+    }
+    
+    func updateUIViewController(_ uiViewController: ViewController, context: Context) {}
+}
+#endif

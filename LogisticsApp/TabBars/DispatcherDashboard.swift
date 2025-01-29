@@ -18,7 +18,7 @@ class CustomTabBarController: UITabBarController {
         let shipmentsVC = UINavigationController(rootViewController: MyShipmentsViewController())
         shipmentsVC.tabBarItem = UITabBarItem(title: "My Shipments", image: UIImage(systemName: "tray.full"), tag: 1)
 
-        let trucksVC = UINavigationController(rootViewController: MyDriversVC())
+        let trucksVC = UINavigationController(rootViewController: DriversViewController())
         trucksVC.tabBarItem = UITabBarItem(title: "My Drivers", image: UIImage(systemName: "car"), tag: 2)
 
         let mapVC = UINavigationController(rootViewController: MapVC())
