@@ -7,14 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C10CC5C82D4AB87600E71C11 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10CC5C72D4AB87200E71C11 /* LocationManager.swift */; };
-		C10CC5CA2D4AB88900E71C11 /* DriverAnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10CC5C92D4AB88600E71C11 /* DriverAnotations.swift */; };
-		C10CC5CE2D4AB8CB00E71C11 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10CC5CD2D4AB8C800E71C11 /* AppError.swift */; };
 		C147B60B2D401C5500390F9A /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = C147B60A2D401C5500390F9A /* FirebaseCore */; };
 		C147B60D2D401C7500390F9A /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = C147B60C2D401C7500390F9A /* FirebaseFirestore */; };
 		C1A5EDA52D3BE2B5007E3F74 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EDA42D3BE2B5007E3F74 /* GoogleSignIn */; };
 		C1A5EDA72D3BE2B5007E3F74 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EDA62D3BE2B5007E3F74 /* GoogleSignInSwift */; };
-		C1A5EE122D400EEC007E3F74 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C1A5EE112D400EEC007E3F74 /* GoogleService-Info.plist */; };
 		C1A5EE152D401169007E3F74 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE142D401169007E3F74 /* FirebaseAnalytics */; };
 		C1A5EE172D401169007E3F74 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE162D401169007E3F74 /* FirebaseAnalyticsOnDeviceConversion */; };
 		C1A5EE192D401169007E3F74 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE182D401169007E3F74 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -30,11 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C10CC5C72D4AB87200E71C11 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
-		C10CC5C92D4AB88600E71C11 /* DriverAnotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnotations.swift; sourceTree = "<group>"; };
-		C10CC5CD2D4AB8C800E71C11 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		C12025D12D37FAB900B453B5 /* LogisticsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LogisticsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C1A5EE112D400EEC007E3F74 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C1E37DC02D382C54006DDA7A /* LogisticsApp copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LogisticsApp copy-Info.plist"; path = "/Users/beqa/Desktop/LogisticApp/LogisticsApp/LogisticsApp copy-Info.plist"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -89,10 +81,6 @@
 		C12025C82D37FAB900B453B5 = {
 			isa = PBXGroup;
 			children = (
-				C10CC5CD2D4AB8C800E71C11 /* AppError.swift */,
-				C10CC5C92D4AB88600E71C11 /* DriverAnotations.swift */,
-				C10CC5C72D4AB87200E71C11 /* LocationManager.swift */,
-				C1A5EE112D400EEC007E3F74 /* GoogleService-Info.plist */,
 				C12025D32D37FAB900B453B5 /* LogisticsApp */,
 				C1E37DC02D382C54006DDA7A /* LogisticsApp copy-Info.plist */,
 				C1A5EE1E2D4013AB007E3F74 /* Frameworks */,
@@ -200,7 +188,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1A5EE122D400EEC007E3F74 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,9 +198,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C10CC5C82D4AB87600E71C11 /* LocationManager.swift in Sources */,
-				C10CC5CE2D4AB8CB00E71C11 /* AppError.swift in Sources */,
-				C10CC5CA2D4AB88900E71C11 /* DriverAnotations.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

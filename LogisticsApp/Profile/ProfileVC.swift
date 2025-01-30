@@ -8,8 +8,8 @@ class AccountViewController: UIViewController {
     private let nameLabel = UILabel()
     private let emailLabel = UILabel()
     private let signOutButton = UIButton(type: .system)
-    private let db = Firestore.firestore() // Firestore reference
-
+    private let db = Firestore.firestore()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGradientBackground()
