@@ -2,25 +2,33 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- Add URL Schemes for Google Sign-In -->
+    <!-- Location Permissions -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to share with dispatchers and for navigation purposes.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We need your location to share with dispatchers and for navigation purposes even when the app is in the background.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to share with dispatchers and for navigation purposes even when the app is in the background.</string>
+    
+    <!-- Required background modes -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>location</string>
+        <string>fetch</string>
+    </array>
+    
+    <!-- Firebase configuration -->
     <key>CFBundleURLTypes</key>
     <array>
         <dict>
             <key>CFBundleURLSchemes</key>
             <array>
-                <!-- Reversed client ID -->
                 <string>com.googleusercontent.apps.1095945358765-9p52r1h6dugaoor82mjv178d9vn64udt</string>
             </array>
         </dict>
     </array>
-
-    <!-- Location Permissions -->
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>We need your location to share with dispatchers and for navigation purposes.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>We need your location to share with dispatchers and for navigation purposes even when the app is in the background.</string>
-
-    <!-- Existing configurations for the app -->
+    
+    <!-- Basic UI configuration -->
     <key>UIApplicationSceneManifest</key>
     <dict>
         <key>UIApplicationSupportsMultipleScenes</key>

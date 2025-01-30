@@ -8,7 +8,11 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     private var locationManager: CLLocationManager
     private var firestore: Firestore
     private var locationUpdateTimer: Timer?
-    private let updateInterval: TimeInterval = 30 // Update every 30 seconds
+    private let updateInterval: TimeInterval = 30
+    private var locationListener: ListenerRegistration?
+    
+    // Add status tracking
+    private var isCurrentlyTracking = false
     
     private override init() {
         locationManager = CLLocationManager()
@@ -20,24 +24,73 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     private func setupLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-        locationManager.distanceFilter = 50 // Minimum distance (meters) before triggering update
+        locationManager.distanceFilter = 50
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.pausesLocationUpdatesAutomatically = false
         locationManager.activityType = .automotiveNavigation
+        locationManager.showsBackgroundLocationIndicator = true
     }
     
     func startTracking() {
-        requestLocationPermissions()
-        startLocationUpdates()
+        guard !isCurrentlyTracking else { return }
+        
+        // Verify Firebase Auth state
+        guard let userId = Auth.auth().currentUser?.uid else {
+            handleError(NSError(
+                domain: "LocationManager",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "User not authenticated. Please log in."]
+            ))
+            return
+        }
+        
+        // First verify the user's role
+        let userDoc = firestore.collection("users").document(userId)
+        userDoc.getDocument { [weak self] (document, error) in
+            guard let self = self else { return }
+            
+            if let error = error {
+                self.handleError(error)
+                return
+            }
+            
+            guard let userData = document?.data(),
+                  let role = userData["role"] as? String,
+                  role == "Driver" else {
+                self.handleError(NSError(
+                    domain: "LocationManager",
+                    code: -2,
+                    userInfo: [NSLocalizedDescriptionKey: "Only drivers can share location"]
+                ))
+                return
+            }
+            
+            // Test location collection permissions
+            self.testAndStartLocationUpdates(userId: userId)
+        }
     }
     
-    func stopTracking() {
-        locationManager.stopUpdatingLocation()
-        locationUpdateTimer?.invalidate()
-    }
-    
-    private func requestLocationPermissions() {
-        locationManager.requestAlwaysAuthorization()
+    private func testAndStartLocationUpdates(userId: String) {
+        // Test write permissions
+        let testData: [String: Any] = [
+            "testTimestamp": FieldValue.serverTimestamp()
+        ]
+        
+        firestore.collection("locations").document(userId)
+            .setData(testData, merge: true) { [weak self] error in
+                guard let self = self else { return }
+                
+                if let error = error {
+                    self.handleError(error)
+                    return
+                }
+                
+                // If we get here, permissions are good
+                self.isCurrentlyTracking = true
+                self.requestLocationPermissions()
+                self.setupLocationListener(userId: userId)
+                self.startLocationUpdates()
+            }
     }
     
     private func startLocationUpdates() {
@@ -47,13 +100,40 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
+    private func setupLocationListener(userId: String) {
+        locationListener?.remove()
+        
+        locationListener = firestore.collection("locations")
+            .document(userId)
+            .addSnapshotListener { [weak self] (document, error) in
+                if let error = error {
+                    self?.handleError(error)
+                }
+            }
+    }
+    
     private func startUpdateTimer() {
+        locationUpdateTimer?.invalidate()
+        
         locationUpdateTimer = Timer.scheduledTimer(
             withTimeInterval: updateInterval,
             repeats: true
         ) { [weak self] _ in
             self?.uploadLastLocation()
         }
+        
+        RunLoop.current.add(locationUpdateTimer!, forMode: .common)
+    }
+    
+    func stopTracking() {
+        locationManager.stopUpdatingLocation()
+        locationUpdateTimer?.invalidate()
+        locationListener?.remove()
+        isCurrentlyTracking = false
+    }
+    
+    private func requestLocationPermissions() {
+        locationManager.requestAlwaysAuthorization()
     }
     
     private func uploadLastLocation() {
@@ -66,7 +146,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             "timestamp": FieldValue.serverTimestamp(),
             "speed": location.speed >= 0 ? location.speed : 0,
             "heading": location.course,
-            "accuracy": location.horizontalAccuracy
+            "accuracy": location.horizontalAccuracy,
+            "userId": userId
         ]
         
         firestore.collection("locations")
@@ -74,6 +155,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             .setData(locationData, merge: true) { [weak self] error in
                 if let error = error {
                     self?.handleError(error)
+                    if (error as NSError).code == FirestoreErrorCode.permissionDenied.rawValue {
+                        self?.stopTracking()
+                    }
                 }
             }
     }
@@ -103,20 +187,25 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
-        case .authorizedAlways, .authorizedWhenInUse:
-            startLocationUpdates()
+        case .authorizedAlways:
+            if isCurrentlyTracking {
+                startLocationUpdates()
+            }
+        case .authorizedWhenInUse:
+            requestLocationPermissions()
         case .denied, .restricted:
-            handleError(AppError.locationPermissionDenied)
+            handleError(NSError(
+                domain: "LocationManager",
+                code: -3,
+                userInfo: [NSLocalizedDescriptionKey: "Location permissions denied"]
+            ))
+            stopTracking()
         case .notDetermined:
             requestLocationPermissions()
         @unknown default:
             break
         }
     }
-}//
-//  LocationManager.swift
-//  LogisticsApp
-//
-//  Created by beqa on 29.01.25.
-//
+}
+
 

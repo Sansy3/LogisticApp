@@ -26,6 +26,21 @@ class MapVC: UIViewController {
         return gradient
     }()
     
+    private lazy var showAllDriversButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "map.fill"), for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 25
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.3
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 4
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(showAllDrivers), for: .touchUpInside)
+        return button
+    }()
+    
     private lazy var centerUserLocationButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "location.fill"), for: .normal)
@@ -63,6 +78,7 @@ class MapVC: UIViewController {
         view.addSubview(mapView)
         view.addSubview(activityIndicator)
         view.addSubview(centerUserLocationButton)
+        view.addSubview(showAllDriversButton)
         
         mapView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -74,6 +90,11 @@ class MapVC: UIViewController {
             
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            showAllDriversButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            showAllDriversButton.bottomAnchor.constraint(equalTo: centerUserLocationButton.topAnchor, constant: -10),
+            showAllDriversButton.widthAnchor.constraint(equalToConstant: 50),
+            showAllDriversButton.heightAnchor.constraint(equalToConstant: 50),
             
             centerUserLocationButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             centerUserLocationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
@@ -88,11 +109,9 @@ class MapVC: UIViewController {
     private func setupMapView() {
         mapView.delegate = self
         mapView.showsUserLocation = true
-        mapView.userTrackingMode = .follow
     }
     
     private func applyMapStyle() {
-        // Use a dark map style for a modern look
         if #available(iOS 13.0, *) {
             mapView.overrideUserInterfaceStyle = .dark
         }
@@ -102,7 +121,6 @@ class MapVC: UIViewController {
         mapView.showsScale = true
         mapView.showsTraffic = false
         
-        // Customize annotation appearance
         mapView.register(
             DriverAnnotationView.self,
             forAnnotationViewWithReuseIdentifier: DriverAnnotationView.identifier
@@ -110,6 +128,10 @@ class MapVC: UIViewController {
     }
     
     // MARK: - Actions
+    @objc private func showAllDrivers() {
+        updateMapRegion()
+    }
+    
     @objc private func centerMapOnUserLocation() {
         if let userLocation = mapView.userLocation.location?.coordinate {
             let region = MKCoordinateRegion(
@@ -136,10 +158,12 @@ class MapVC: UIViewController {
                     return
                 }
                 
+                // Process all changes
                 snapshot?.documentChanges.forEach { change in
                     self.handleLocationChange(change)
                 }
                 
+                // Show all drivers after processing changes
                 self.updateMapRegion()
             }
     }
@@ -171,9 +195,7 @@ class MapVC: UIViewController {
             
             DispatchQueue.main.async {
                 if let annotation = self.driverAnnotations[driverId] {
-                    if let annotationView = self.mapView.view(for: annotation) as? DriverAnnotationView {
-                        annotationView.animateLocationUpdate(to: coordinate)
-                    }
+                    annotation.updateLocation(coordinate)
                     annotation.subtitle = self.formatLastUpdateTime()
                 } else {
                     let annotation = DriverAnnotation(
@@ -218,8 +240,30 @@ class MapVC: UIViewController {
     private func updateMapRegion() {
         guard !driverAnnotations.isEmpty else { return }
         
-        let annotations = Array(driverAnnotations.values)
-        mapView.showAnnotations(annotations, animated: true)
+        var coordinates: [CLLocationCoordinate2D] = []
+        
+        // Include all driver locations
+        for annotation in driverAnnotations.values {
+            coordinates.append(annotation.coordinate)
+        }
+        
+        // Include user location if available
+        if let userLocation = mapView.userLocation.location?.coordinate {
+            coordinates.append(userLocation)
+        }
+        
+        // Calculate the region that includes all points with padding
+        let rect = coordinates.reduce(MKMapRect.null) { rect, coordinate in
+            let point = MKMapPoint(coordinate)
+            let pointRect = MKMapRect(x: point.x, y: point.y, width: 0, height: 0)
+            return rect.union(pointRect)
+        }
+        
+        // Add 20% padding around the region
+        let padding: Double = 1.2
+        let paddedRect = rect.insetBy(dx: -rect.width * (padding - 1) / 2, dy: -rect.height * (padding - 1) / 2)
+        
+        mapView.setVisibleMapRect(paddedRect, animated: true)
     }
     
     private func formatLastUpdateTime() -> String {
