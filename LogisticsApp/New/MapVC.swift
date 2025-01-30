@@ -7,14 +7,38 @@ class MapVC: UIViewController {
     private let mapView = MKMapView()
     private let db = Firestore.firestore()
     private var driverAnnotations: [String: DriverAnnotation] = [:]
-    private var listenersCount = 0
-    private var annotationViewIdentifier = "DriverAnnotationView"
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.hidesWhenStopped = true
+        indicator.color = .white
         indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
+    }()
+    
+    private lazy var gradientOverlay: CAGradientLayer = {
+        let gradient = CAGradientLayer()
+        gradient.colors = [
+            UIColor.black.withAlphaComponent(0.5).cgColor,
+            UIColor.clear.cgColor
+        ]
+        gradient.locations = [0.0, 0.5]
+        return gradient
+    }()
+    
+    private lazy var centerUserLocationButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "location.fill"), for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 25
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.3
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 4
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(centerMapOnUserLocation), for: .touchUpInside)
+        return button
     }()
     
     // MARK: - Lifecycle
@@ -22,7 +46,13 @@ class MapVC: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupMapView()
+        applyMapStyle()
         listenToDriverLocations()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        gradientOverlay.frame = view.bounds
     }
     
     // MARK: - Setup
@@ -32,6 +62,7 @@ class MapVC: UIViewController {
         
         view.addSubview(mapView)
         view.addSubview(activityIndicator)
+        view.addSubview(centerUserLocationButton)
         
         mapView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -42,14 +73,52 @@ class MapVC: UIViewController {
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            centerUserLocationButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            centerUserLocationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            centerUserLocationButton.widthAnchor.constraint(equalToConstant: 50),
+            centerUserLocationButton.heightAnchor.constraint(equalToConstant: 50)
         ])
+        
+        // Add gradient overlay
+        view.layer.insertSublayer(gradientOverlay, above: mapView.layer)
     }
     
     private func setupMapView() {
         mapView.delegate = self
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
+    }
+    
+    private func applyMapStyle() {
+        // Use a dark map style for a modern look
+        if #available(iOS 13.0, *) {
+            mapView.overrideUserInterfaceStyle = .dark
+        }
+        
+        mapView.mapType = .mutedStandard
+        mapView.showsCompass = true
+        mapView.showsScale = true
+        mapView.showsTraffic = false
+        
+        // Customize annotation appearance
+        mapView.register(
+            DriverAnnotationView.self,
+            forAnnotationViewWithReuseIdentifier: DriverAnnotationView.identifier
+        )
+    }
+    
+    // MARK: - Actions
+    @objc private func centerMapOnUserLocation() {
+        if let userLocation = mapView.userLocation.location?.coordinate {
+            let region = MKCoordinateRegion(
+                center: userLocation,
+                latitudinalMeters: 1000,
+                longitudinalMeters: 1000
+            )
+            mapView.setRegion(region, animated: true)
+        }
     }
     
     // MARK: - Driver Location Tracking
@@ -102,10 +171,10 @@ class MapVC: UIViewController {
             
             DispatchQueue.main.async {
                 if let annotation = self.driverAnnotations[driverId] {
-                    UIView.animate(withDuration: 0.3) {
-                        annotation.updateLocation(coordinate)
-                        annotation.subtitle = self.formatLastUpdateTime()
+                    if let annotationView = self.mapView.view(for: annotation) as? DriverAnnotationView {
+                        annotationView.animateLocationUpdate(to: coordinate)
                     }
+                    annotation.subtitle = self.formatLastUpdateTime()
                 } else {
                     let annotation = DriverAnnotation(
                         coordinate: coordinate,

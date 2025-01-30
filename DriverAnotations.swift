@@ -13,14 +13,8 @@ class DriverAnnotation: MKPointAnnotation {
         self.subtitle = subtitle
     }
     
-    func updateLocation(_ coordinate: CLLocationCoordinate2D) {
-        self.coordinate = coordinate
+    func updateLocation(_ newCoordinate: CLLocationCoordinate2D) {
+        self.coordinate = newCoordinate
         self.lastUpdate = Date()
     }
-}//
-//  DriverAnotations.swift
-//  LogisticsApp
-//
-//  Created by beqa on 29.01.25.
-//
-
+}
