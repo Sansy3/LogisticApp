@@ -185,34 +185,4 @@ extension DriversViewController: UISearchResultsUpdating {
     }
 }
 
-// MARK: - Preview Provider
-#if DEBUG
-import SwiftUI
 
-struct DriversViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        // Create a UIKit view controller wrapper for SwiftUI preview
-        UIViewControllerPreview {
-            let navigationController = UINavigationController(
-                rootViewController: DriversViewController()
-            )
-            return navigationController
-        }
-    }
-}
-
-// Helper struct for UIViewController previews
-struct UIViewControllerPreview<ViewController: UIViewController>: UIViewControllerRepresentable {
-    let viewController: ViewController
-    
-    init(_ builder: @escaping () -> ViewController) {
-        viewController = builder()
-    }
-    
-    func makeUIViewController(context: Context) -> ViewController {
-        viewController
-    }
-    
-    func updateUIViewController(_ uiViewController: ViewController, context: Context) {}
-}
-#endif

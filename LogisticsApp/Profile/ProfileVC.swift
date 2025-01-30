@@ -1,27 +1,25 @@
-import GoogleSignIn
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
-class AccountViewController: UIViewController {
+class ProfileViewController: UIViewController {
     private let profileImageView = UIImageView()
     private let nameLabel = UILabel()
     private let emailLabel = UILabel()
+    private let roleLabel = UILabel()
     private let signOutButton = UIButton(type: .system)
     private let db = Firestore.firestore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGradientBackground()
-        title = "Account"
-
         setupUI()
         populateProfileInfo()
     }
 
     private func setupGradientBackground() {
         let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [UIColor.systemBlue.cgColor, UIColor.systemPurple.cgColor]
+        gradientLayer.colors = [UIColor.systemBlue.cgColor, UIColor.systemTeal.cgColor]
         gradientLayer.locations = [0, 1]
         gradientLayer.frame = view.bounds
         view.layer.insertSublayer(gradientLayer, at: 0)
@@ -45,6 +43,11 @@ class AccountViewController: UIViewController {
         emailLabel.textColor = .white.withAlphaComponent(0.8)
         emailLabel.translatesAutoresizingMaskIntoConstraints = false
 
+        roleLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        roleLabel.textAlignment = .center
+        roleLabel.textColor = .white.withAlphaComponent(0.8)
+        roleLabel.translatesAutoresizingMaskIntoConstraints = false
+
         signOutButton.setTitle("Sign Out", for: .normal)
         signOutButton.setTitleColor(.white, for: .normal)
         signOutButton.layer.cornerRadius = 20
@@ -56,6 +59,7 @@ class AccountViewController: UIViewController {
         view.addSubview(profileImageView)
         view.addSubview(nameLabel)
         view.addSubview(emailLabel)
+        view.addSubview(roleLabel)
         view.addSubview(signOutButton)
 
         NSLayoutConstraint.activate([
@@ -72,7 +76,11 @@ class AccountViewController: UIViewController {
             emailLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             emailLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
 
-            signOutButton.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 20),
+            roleLabel.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 8),
+            roleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            roleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+
+            signOutButton.topAnchor.constraint(equalTo: roleLabel.bottomAnchor, constant: 20),
             signOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             signOutButton.widthAnchor.constraint(equalToConstant: 140),
             signOutButton.heightAnchor.constraint(equalToConstant: 40)
@@ -80,60 +88,22 @@ class AccountViewController: UIViewController {
     }
 
     private func populateProfileInfo() {
-        if let user = GIDSignIn.sharedInstance.currentUser {
-            // Google Sign-In user
-            nameLabel.text = user.profile?.name
-            emailLabel.text = user.profile?.email
-            if let imageURL = user.profile?.imageURL(withDimension: 100) {
-                DispatchQueue.global().async {
-                    if let data = try? Data(contentsOf: imageURL) {
-                        DispatchQueue.main.async {
-                            self.profileImageView.image = UIImage(data: data)
-                        }
-                    }
-                }
-            }
-        } else if let userId = Auth.auth().currentUser?.uid {
-            // Firebase authenticated user
+        if let userId = Auth.auth().currentUser?.uid {
             db.collection("users").document(userId).getDocument { [weak self] document, error in
-                if let error = error {
-                    print("Error fetching user data: \(error.localizedDescription)")
-                    return
-                }
-
                 if let document = document, document.exists {
                     let data = document.data()
                     self?.nameLabel.text = data?["name"] as? String ?? "Unknown Name"
                     self?.emailLabel.text = data?["email"] as? String ?? "Unknown Email"
-                    if let imageURL = data?["profileImageURL"] as? String, let url = URL(string: imageURL) {
-                        DispatchQueue.global().async {
-                            if let data = try? Data(contentsOf: url) {
-                                DispatchQueue.main.async {
-                                    self?.profileImageView.image = UIImage(data: data)
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    print("No user data found")
+                    self?.roleLabel.text = "Role: \(data?["role"] as? String ?? "Unknown")"
                 }
             }
-        } else {
-            // Default case (not signed in)
-            nameLabel.text = "Not Logged In"
-            emailLabel.text = ""
-            profileImageView.image = UIImage(named: "gogona")
-            profileImageView.tintColor = .white
         }
     }
 
     @objc private func signOutTapped() {
-        GIDSignIn.sharedInstance.signOut()
         do {
             try Auth.auth().signOut()
-            if let sceneDelegate = view.window?.windowScene?.delegate as? SceneDelegate {
-                sceneDelegate.window?.rootViewController = SignInViewController()
-            }
+            self.dismiss(animated: true, completion: nil)
         } catch {
             print("Error signing out: \(error.localizedDescription)")
         }

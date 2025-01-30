@@ -31,7 +31,7 @@ class DriverTabBarController: UITabBarController {
                 image: "map"
             ),
             createNavigationController(
-                for: AccountViewController(),
+                for: ProfileViewController(),
                 title: "Account",
                 image: "person.circle"
             )
