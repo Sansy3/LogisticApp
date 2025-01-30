@@ -17,12 +17,6 @@
 		C1A5EE1B2D401169007E3F74 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE1A2D401169007E3F74 /* FirebaseAppCheck */; };
 		C1A5EE1D2D401169007E3F74 /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE1C2D401169007E3F74 /* FirebaseAppDistribution-Beta */; };
 		C1A5EE202D4013AB007E3F74 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE1F2D4013AB007E3F74 /* FirebaseAuth */; };
-		C1A5EE232D40154F007E3F74 /* GoogleAPIClientForRESTCore in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE222D40154F007E3F74 /* GoogleAPIClientForRESTCore */; };
-		C1A5EE252D40154F007E3F74 /* GoogleAPIClientForREST_ACMEDNS in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE242D40154F007E3F74 /* GoogleAPIClientForREST_ACMEDNS */; };
-		C1A5EE272D40154F007E3F74 /* GoogleAPIClientForREST_AIPlatformNotebooks in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE262D40154F007E3F74 /* GoogleAPIClientForREST_AIPlatformNotebooks */; };
-		C1A5EE292D40154F007E3F74 /* GoogleAPIClientForREST_APIGateway in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE282D40154F007E3F74 /* GoogleAPIClientForREST_APIGateway */; };
-		C1A5EE2B2D40154F007E3F74 /* GoogleAPIClientForREST_APIManagement in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE2A2D40154F007E3F74 /* GoogleAPIClientForREST_APIManagement */; };
-		C1A5EE2D2D401578007E3F74 /* GoogleAPIClientForREST_Gmail in Frameworks */ = {isa = PBXBuildFile; productRef = C1A5EE2C2D401578007E3F74 /* GoogleAPIClientForREST_Gmail */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,10 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1A5EE2D2D401578007E3F74 /* GoogleAPIClientForREST_Gmail in Frameworks */,
 				C147B60B2D401C5500390F9A /* FirebaseCore in Frameworks */,
-				C1A5EE272D40154F007E3F74 /* GoogleAPIClientForREST_AIPlatformNotebooks in Frameworks */,
-				C1A5EE292D40154F007E3F74 /* GoogleAPIClientForREST_APIGateway in Frameworks */,
 				C1A5EE1D2D401169007E3F74 /* FirebaseAppDistribution-Beta in Frameworks */,
 				C147B60D2D401C7500390F9A /* FirebaseFirestore in Frameworks */,
 				C1A5EDA52D3BE2B5007E3F74 /* GoogleSignIn in Frameworks */,
@@ -67,11 +58,8 @@
 				C1A5EDA72D3BE2B5007E3F74 /* GoogleSignInSwift in Frameworks */,
 				C1A5EE152D401169007E3F74 /* FirebaseAnalytics in Frameworks */,
 				C1A5EE1B2D401169007E3F74 /* FirebaseAppCheck in Frameworks */,
-				C1A5EE2B2D40154F007E3F74 /* GoogleAPIClientForREST_APIManagement in Frameworks */,
 				C1A5EE172D401169007E3F74 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
-				C1A5EE232D40154F007E3F74 /* GoogleAPIClientForRESTCore in Frameworks */,
 				C1A5EE202D4013AB007E3F74 /* FirebaseAuth in Frameworks */,
-				C1A5EE252D40154F007E3F74 /* GoogleAPIClientForREST_ACMEDNS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,12 +119,6 @@
 				C1A5EE1A2D401169007E3F74 /* FirebaseAppCheck */,
 				C1A5EE1C2D401169007E3F74 /* FirebaseAppDistribution-Beta */,
 				C1A5EE1F2D4013AB007E3F74 /* FirebaseAuth */,
-				C1A5EE222D40154F007E3F74 /* GoogleAPIClientForRESTCore */,
-				C1A5EE242D40154F007E3F74 /* GoogleAPIClientForREST_ACMEDNS */,
-				C1A5EE262D40154F007E3F74 /* GoogleAPIClientForREST_AIPlatformNotebooks */,
-				C1A5EE282D40154F007E3F74 /* GoogleAPIClientForREST_APIGateway */,
-				C1A5EE2A2D40154F007E3F74 /* GoogleAPIClientForREST_APIManagement */,
-				C1A5EE2C2D401578007E3F74 /* GoogleAPIClientForREST_Gmail */,
 				C147B60A2D401C5500390F9A /* FirebaseCore */,
 				C147B60C2D401C7500390F9A /* FirebaseFirestore */,
 			);
@@ -171,7 +153,6 @@
 			packageReferences = (
 				C1A5EDA32D3BE2B5007E3F74 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				C1A5EE132D401169007E3F74 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				C1A5EE212D40154F007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C12025D22D37FAB900B453B5 /* Products */;
@@ -421,14 +402,6 @@
 				version = 11.7.0;
 			};
 		};
-		C1A5EE212D40154F007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/google/google-api-objectivec-client-for-rest";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -481,36 +454,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C1A5EE132D401169007E3F74 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
-		};
-		C1A5EE222D40154F007E3F74 /* GoogleAPIClientForRESTCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C1A5EE212D40154F007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
-			productName = GoogleAPIClientForRESTCore;
-		};
-		C1A5EE242D40154F007E3F74 /* GoogleAPIClientForREST_ACMEDNS */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C1A5EE212D40154F007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
-			productName = GoogleAPIClientForREST_ACMEDNS;
-		};
-		C1A5EE262D40154F007E3F74 /* GoogleAPIClientForREST_AIPlatformNotebooks */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C1A5EE212D40154F007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
-			productName = GoogleAPIClientForREST_AIPlatformNotebooks;
-		};
-		C1A5EE282D40154F007E3F74 /* GoogleAPIClientForREST_APIGateway */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C1A5EE212D40154F007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
-			productName = GoogleAPIClientForREST_APIGateway;
-		};
-		C1A5EE2A2D40154F007E3F74 /* GoogleAPIClientForREST_APIManagement */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C1A5EE212D40154F007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
-			productName = GoogleAPIClientForREST_APIManagement;
-		};
-		C1A5EE2C2D401578007E3F74 /* GoogleAPIClientForREST_Gmail */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C1A5EE212D40154F007E3F74 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
-			productName = GoogleAPIClientForREST_Gmail;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
