@@ -23,9 +23,6 @@ class NetworkManager {
             }
             
             do {
-                if let jsonString = String(data: data, encoding: .utf8) {
-                    print("Raw JSON Response: \(jsonString)")
-                }
                 let decoder = JSONDecoder()
                 let loadItems = try decoder.decode([LoadItem].self, from: data)
                 DispatchQueue.main.async {

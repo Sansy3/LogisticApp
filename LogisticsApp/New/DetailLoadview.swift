@@ -1,7 +1,7 @@
 import SwiftUI
+import FirebaseFirestore
 import MapKit
 
-// MARK: - Detail View
 struct DetailLoadView: View {
     @Environment(\.presentationMode) var presentationMode
     let loadItem: LoadItem
@@ -10,6 +10,11 @@ struct DetailLoadView: View {
     @State private var destinationCoordinate: CLLocationCoordinate2D?
     @State private var distanceInMiles: String?
     @State private var isLoading = true
+    @State private var selectedDriver: Driver?
+    @State private var drivers: [Driver] = []
+    @State private var errorMessage: String?
+
+    private let db = Firestore.firestore()
 
     var body: some View {
         ScrollView {
@@ -30,17 +35,22 @@ struct DetailLoadView: View {
                         .foregroundColor(.red)
                         .font(.headline)
                 }
+
+                driverSelectionSection
+                assignDriverButton
                 backButton
             }
             .padding()
             .onAppear {
                 fetchCoordinates()
+                fetchDrivers()
             }
         }
         .navigationBarTitle("Load Details", displayMode: .inline)
     }
 
     // MARK: - UI Components
+
     private var headerSection: some View {
         VStack(spacing: 8) {
             Text("Load Details")
@@ -85,6 +95,55 @@ struct DetailLoadView: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }
+    }
+
+    private var driverSelectionSection: some View {
+        VStack(spacing: 15) {
+            Text("Select a Driver")
+                .font(.headline)
+                .padding(.top)
+
+            if drivers.isEmpty {
+                Text("No drivers available")
+                    .foregroundColor(.red)
+                    .font(.subheadline)
+            } else {
+                ForEach(drivers, id: \.id) { driver in
+                    Button(action: {
+                        self.selectedDriver = driver
+                    }) {
+                        Text("\(driver.firstName) \(driver.lastName)")
+                            .padding()
+                            .background(self.selectedDriver?.id == driver.id ? Color.green : Color.white)
+                            .foregroundColor(self.selectedDriver?.id == driver.id ? .white : .black)
+                            .cornerRadius(8)
+                            .shadow(radius: 5)
+                            .padding(.bottom, 5)
+                    }
+                }
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    private var assignDriverButton: some View {
+        Button(action: {
+            if let driver = selectedDriver {
+                assignDriverToLoad(driverId: driver.id, loadId: loadItem.id)
+            }
+        }) {
+            Text("Assign Driver")
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.blue)
+                .cornerRadius(12)
+                .shadow(radius: 10)
+                .padding(.horizontal)
+        }
+        .padding(.top)
+        .disabled(selectedDriver == nil)
     }
 
     private var backButton: some View {
@@ -150,5 +209,31 @@ struct DetailLoadView: View {
         let distanceInMeters = originLocation.distance(from: destinationLocation)
         let distanceInMiles = distanceInMeters * 0.000621371
         return String(format: "%.2f", distanceInMiles)
+    }
+
+    // MARK: - Fetch Drivers from FirebaseManager
+    private func fetchDrivers() {
+        FirebaseManager.shared.listenToDrivers { result in
+            switch result {
+            case .success(let fetchedDrivers):
+                self.drivers = fetchedDrivers
+            case .failure(let error):
+                self.errorMessage = "Error fetching drivers: \(error.localizedDescription)"
+            }
+        }
+    }
+
+    // MARK: - Assign Driver to Load
+    private func assignDriverToLoad(driverId: String, loadId: String) {
+        FirebaseManager.shared.addLoadToFirestore(loadItem: loadItem) { success in
+            if success {
+                // If load is successfully added, now assign the driver
+                FirebaseManager.shared.assignDriverToLoad(loadId: loadId, driverId: driverId)
+                presentationMode.wrappedValue.dismiss()  // Close the details view after assignment
+            } else {
+                // Handle the error, display an alert, or notify the user that the load couldn't be added
+                errorMessage = "Error adding load to Firestore"
+            }
+        }
     }
 }
