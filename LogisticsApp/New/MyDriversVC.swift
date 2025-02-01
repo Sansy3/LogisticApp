@@ -1,6 +1,8 @@
 import UIKit
 import FirebaseAuth
 
+
+
 class DriversViewController: UIViewController {
     // MARK: - Properties
     private let viewModel: DriversViewModelProtocol
@@ -99,6 +101,7 @@ class DriversViewController: UIViewController {
                                          style: .plain,
                                          target: self,
                                          action: #selector(openChat))
+        chatButton.tintColor = .systemBlue
         navigationItem.rightBarButtonItem = chatButton
     }
     
@@ -140,12 +143,7 @@ class DriversViewController: UIViewController {
     }
     
     @objc private func openChat() {
-        guard let userId = Auth.auth().currentUser?.uid else {
-            showError("User not authenticated")
-            return
-        }
-        
-        let chatVC = ChatViewController(conversationId: userId)
+        let chatVC = ChatViewController()
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
@@ -162,8 +160,6 @@ class DriversViewController: UIViewController {
         present(alert, animated: true)
     }
 }
-
-// MARK: - UITableViewDelegate & UITableViewDataSource
 // MARK: - UITableViewDelegate & UITableViewDataSource
 extension DriversViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -182,20 +178,20 @@ extension DriversViewController: UITableViewDelegate, UITableViewDataSource {
         cell.configure(with: driver)
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-
-    // ✅ Moved here to silence the warning
+    
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let selectedDriver = viewModel.drivers[indexPath.row]
     }
 }
-
 
 // MARK: - UISearchResultsUpdating
 extension DriversViewController: UISearchResultsUpdating {

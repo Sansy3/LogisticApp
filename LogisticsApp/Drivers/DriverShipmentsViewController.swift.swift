@@ -2,6 +2,7 @@ import UIKit
 import FirebaseFirestore
 import FirebaseAuth
 
+
 class DriverShipmentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     // MARK: - Properties
     private var shipments: [FirestoreLoadItem] = []
@@ -105,6 +106,14 @@ class DriverShipmentsViewController: UIViewController, UITableViewDataSource, UI
         title = "My Shipments"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
+        
+        // Add chat button to navigation bar
+        let chatButton = UIBarButtonItem(image: UIImage(systemName: "message.fill"),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(openChat))
+        chatButton.tintColor = .systemBlue
+        navigationItem.rightBarButtonItem = chatButton
     }
     
     private func setupTableView() {
@@ -145,12 +154,17 @@ class DriverShipmentsViewController: UIViewController, UITableViewDataSource, UI
             }
         }
     }
-
     
     private func showErrorAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
+    }
+    
+    // MARK: - Actions
+    @objc private func openChat() {
+        let chatVC = ChatViewController()
+        navigationController?.pushViewController(chatVC, animated: true)
     }
     
     // MARK: - TableView DataSource & Delegate
