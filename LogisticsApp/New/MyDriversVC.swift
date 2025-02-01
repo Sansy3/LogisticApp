@@ -1,4 +1,5 @@
 import UIKit
+import FirebaseAuth
 
 class DriversViewController: UIViewController {
     // MARK: - Properties
@@ -52,6 +53,7 @@ class DriversViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupSearchController()
+        setupNavigationBar()
         bindViewModel()
         viewModel.listenToDrivers()
     }
@@ -92,6 +94,14 @@ class DriversViewController: UIViewController {
         definesPresentationContext = true
     }
     
+    private func setupNavigationBar() {
+        let chatButton = UIBarButtonItem(image: UIImage(systemName: "message.fill"),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(openChat))
+        navigationItem.rightBarButtonItem = chatButton
+    }
+    
     private func bindViewModel() {
         viewModel.onStateChanged = { [weak self] state in
             DispatchQueue.main.async {
@@ -129,6 +139,16 @@ class DriversViewController: UIViewController {
         viewModel.refreshData()
     }
     
+    @objc private func openChat() {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            showError("User not authenticated")
+            return
+        }
+        
+        let chatVC = ChatViewController(conversationId: userId)
+        navigationController?.pushViewController(chatVC, animated: true)
+    }
+    
     private func showError(_ message: String) {
         let alert = UIAlertController(
             title: "Error",
@@ -143,6 +163,7 @@ class DriversViewController: UIViewController {
     }
 }
 
+// MARK: - UITableViewDelegate & UITableViewDataSource
 // MARK: - UITableViewDelegate & UITableViewDataSource
 extension DriversViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -161,21 +182,20 @@ extension DriversViewController: UITableViewDelegate, UITableViewDataSource {
         cell.configure(with: driver)
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-    
+
+    // ✅ Moved here to silence the warning
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Handle driver selection - you can add navigation to driver details here
-        let driver = viewModel.drivers[indexPath.row]
-        // Example: navigationController?.pushViewController(DriverDetailsVC(driver: driver), animated: true)
     }
 }
+
 
 // MARK: - UISearchResultsUpdating
 extension DriversViewController: UISearchResultsUpdating {
@@ -184,5 +204,3 @@ extension DriversViewController: UISearchResultsUpdating {
         viewModel.filterDrivers(searchText: searchText)
     }
 }
-
-
