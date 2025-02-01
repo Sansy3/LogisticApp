@@ -65,13 +65,11 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
                 return
             }
             
-            // Test location collection permissions
             self.testAndStartLocationUpdates(userId: userId)
         }
     }
     
     private func testAndStartLocationUpdates(userId: String) {
-        // Test write permissions
         let testData: [String: Any] = [
             "testTimestamp": FieldValue.serverTimestamp()
         ]
@@ -85,7 +83,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
                     return
                 }
                 
-                // If we get here, permissions are good
                 self.isCurrentlyTracking = true
                 self.requestLocationPermissions()
                 self.setupLocationListener(userId: userId)

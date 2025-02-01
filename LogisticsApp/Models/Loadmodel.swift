@@ -20,7 +20,7 @@ struct LoadItem: Decodable {
         case status = "Status"
         case weight = "weight"
         case deliveryDate = "DeliveryDate"
-        case pickupDate = "PicukDate" // Handle misspelled key
+        case pickupDate = "PicukDate" 
         case truckType = "TruckType"
     }
 }

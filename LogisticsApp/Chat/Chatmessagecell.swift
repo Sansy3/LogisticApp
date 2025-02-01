@@ -7,7 +7,6 @@
 
 import UIKit
 
-// Custom UITableViewCell for chat messages
 class ChatMessageCell: UITableViewCell {
     let nameLabel: UILabel = {
         let label = UILabel()

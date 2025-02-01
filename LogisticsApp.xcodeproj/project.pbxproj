@@ -21,13 +21,13 @@
 
 /* Begin PBXFileReference section */
 		C12025D12D37FAB900B453B5 /* LogisticsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LogisticsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C1E37DC02D382C54006DDA7A /* LogisticsApp copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LogisticsApp copy-Info.plist"; path = "/Users/beqa/Desktop/LogisticApp/LogisticsApp/LogisticsApp copy-Info.plist"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
 		C12025E32D37FABD00B453B5 /* Exceptions for "LogisticsApp" folder in "LogisticsApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"/Users/beqa/Desktop/LogisticApp/LogisticsApp/LogisticsApp/LogisticsApp copy-Info.plist",
 				Info.plist,
 			);
 			target = C12025D02D37FAB900B453B5 /* LogisticsApp */;
@@ -70,7 +70,6 @@
 			isa = PBXGroup;
 			children = (
 				C12025D32D37FAB900B453B5 /* LogisticsApp */,
-				C1E37DC02D382C54006DDA7A /* LogisticsApp copy-Info.plist */,
 				C1A5EE1E2D4013AB007E3F74 /* Frameworks */,
 				C12025D22D37FAB900B453B5 /* Products */,
 			);

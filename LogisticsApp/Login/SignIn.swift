@@ -292,7 +292,6 @@ class SignInViewController: UIViewController {
                 
                 let selectedRole = roleControl.selectedSegmentIndex == 0 ? "Driver" : "Dispatcher"
                 
-                // Validate truck details for drivers
                 if selectedRole == "Driver" {
                     guard let length = Double(dimensionFields[0].text ?? ""),
                           let width = Double(dimensionFields[1].text ?? ""),
@@ -314,7 +313,6 @@ class SignInViewController: UIViewController {
                         
                         guard let userId = result?.user.uid else { return }
                         
-                        // Save user profile with truck details
                         self?.db.collection("users").document(userId).setData([
                             "name": name,
                             "email": email,
@@ -336,15 +334,13 @@ class SignInViewController: UIViewController {
                                 self?.showAlert(message: "Error saving user to Firestore: \(error.localizedDescription)")
                             } else {
                                 self?.showAlert(message: "User profile saved successfully. Please sign in.") {
-                                    // Sign out the user after sign-up
                                     try? Auth.auth().signOut()
-                                    self?.toggleButtonTapped() // Switch back to sign in mode
+                                    self?.toggleButtonTapped()
                                 }
                             }
                         }
                     }
                 } else {
-                    // For dispatcher role, create user without truck details
                     Auth.auth().createUser(withEmail: email, password: password) { [weak self] result, error in
                         if let error = error {
                             self?.showAlert(message: "Error signing up: \(error.localizedDescription)")

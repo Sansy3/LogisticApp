@@ -112,7 +112,6 @@ class MyShipmentsViewController: UIViewController, UITableViewDataSource, UITabl
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
         
-        // Add search controller if needed
         let searchController = UISearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Shipments"

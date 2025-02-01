@@ -119,7 +119,6 @@ class MapVC: UIViewController {
                     return
                 }
                 
-                // Process all changes
                 snapshot?.documentChanges.forEach { change in
                     self.handleLocationChange(change)
                 }
@@ -171,17 +170,17 @@ class MapVC: UIViewController {
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                let subtitle = self.formatLastUpdateTime() // Get the subtitle (last updated time)
+                let subtitle = self.formatLastUpdateTime()
                 
                 if let annotation = self.driverAnnotations[driverId] {
                     annotation.updateLocation(coordinate)
-                    annotation.subtitle = subtitle // Update the subtitle for existing annotation
+                    annotation.subtitle = subtitle
                 } else {
                     let annotation = DriverAnnotation(
                         coordinate: coordinate,
                         driverId: driverId,
                         title: name,
-                        subtitle: subtitle // Pass the subtitle here
+                        subtitle: subtitle
                     )
                     self.driverAnnotations[driverId] = annotation
                     self.mapView.addAnnotation(annotation)
@@ -226,12 +225,10 @@ class MapVC: UIViewController {
     private func updateMapRegionForAllDrivers() {
         var coordinates: [CLLocationCoordinate2D] = []
         
-        // Include all driver locations
         for annotation in driverAnnotations.values {
             coordinates.append(annotation.coordinate)
         }
         
-        // Include user location if available
         if let userLocation = mapView.userLocation.location?.coordinate {
             coordinates.append(userLocation)
         }
@@ -255,7 +252,6 @@ class MapVC: UIViewController {
         mapView.removeAnnotations(mapView.annotations)
         mapView.addAnnotation(annotation)
         
-        // Optionally, center the map on the user location
         let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
         mapView.setRegion(region, animated: true)
     }

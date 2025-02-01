@@ -56,7 +56,6 @@ class FirebaseManager: FirebaseManagerProtocol {
                     return
                 }
                 
-                // Decode documents as FirestoreLoadItem
                 let firestoreLoads = documents.compactMap { doc -> FirestoreLoadItem? in
                     do {
                         let load = try doc.data(as: FirestoreLoadItem.self)
@@ -75,7 +74,6 @@ class FirebaseManager: FirebaseManagerProtocol {
     func assignDriverToLoad(loadId: String, driverId: String) {
         let loadRef = db.collection("loads").document(loadId)
         
-        // Check if the document exists first
         loadRef.getDocument { document, error in
             if let error = error {
                 print("Error fetching load document: \(error.localizedDescription)")
@@ -99,7 +97,7 @@ class FirebaseManager: FirebaseManagerProtocol {
 
     // MARK: - Listen to Drivers in Firestore
     func listenToDrivers(completion: @escaping (Result<[Driver], Error>) -> Void) -> ListenerRegistration {
-        return db.collection("users")  // Assuming drivers are stored as "users" with role = "Driver"
+        return db.collection("users")
             .whereField("role", isEqualTo: "Driver")
             .addSnapshotListener { snapshot, error in
                 if let error = error {
@@ -129,7 +127,6 @@ class FirebaseManager: FirebaseManagerProtocol {
                         return nil
                     }
                     
-                    // Split the full name into first and last name
                     let nameParts = name.components(separatedBy: " ")
                     let firstName = nameParts.first ?? ""
                     let lastName = nameParts.dropFirst().joined(separator: " ")
@@ -174,7 +171,6 @@ class FirebaseManager: FirebaseManagerProtocol {
                     return
                 }
                 
-                // Decode documents as FirestoreLoadItem
                 let firestoreLoads = documents.compactMap { doc -> FirestoreLoadItem? in
                     do {
                         let load = try doc.data(as: FirestoreLoadItem.self)

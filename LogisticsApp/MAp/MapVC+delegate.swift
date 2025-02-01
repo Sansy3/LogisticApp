@@ -12,7 +12,6 @@ extension MapVC: MKMapViewDelegate {
         
         let calloutView = CustomCalloutView(frame: CGRect(x: 0, y: 0, width: 200, height: 70))
         
-        // Explicitly unwrap optionals
         if let title = annotation.title, let subtitle = annotation.subtitle {
             calloutView.configure(with: title!, time: subtitle!)
         } else {

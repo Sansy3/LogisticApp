@@ -5,9 +5,9 @@ import FirebaseAuth
 class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var messages: [Message] = []
-    let conversationId = "globalConversation" // Predefined conversation ID
+    let conversationId = "globalConversation"
     let db = Firestore.firestore()
-    var usersInfo: [String: (name: String, role: String)] = [:] // Dictionary to store user info
+    var usersInfo: [String: (name: String, role: String)] = [:]
     
     let tableView: UITableView = {
         let tv = UITableView()
@@ -97,7 +97,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
                 guard let documents = snapshot?.documents else { return }
                 self.messages = documents.compactMap { Message(dictionary: $0.data()) }
                 
-                // Fetch user info for each message if not already fetched
                 for message in self.messages {
                     if self.usersInfo[message.senderId] == nil {
                         self.fetchUserInfo(for: message.senderId)
@@ -130,7 +129,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
             
-            // Reload table view to reflect new user info
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -150,7 +148,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.usersInfo[userId] = (name: name, role: role)
             }
             
-            // Reload table view to reflect new user info
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }

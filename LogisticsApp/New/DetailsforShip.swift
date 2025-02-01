@@ -38,10 +38,3 @@ class LoadDetailViewController: UIViewController {
         view.addSubview(label)
     }
 }
-//
-//  DetailsforShip.swift
-//  LogisticsApp
-//
-//  Created by beqa on 30.01.25.
-//
-

@@ -9,7 +9,7 @@ import FirebaseFirestore
 
 
 struct FirestoreLoadItem: Identifiable, Decodable {
-    @DocumentID var id: String?  // Firestore document ID
+    @DocumentID var id: String?  
     var assignedDriverId: String?
     var deliveryDate: String
     var destination: String

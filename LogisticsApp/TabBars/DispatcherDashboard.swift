@@ -62,9 +62,9 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         let tabBarItemView = tabBarButtons[index]
 
         let bounceAnimation = CAKeyframeAnimation(keyPath: "transform.scale")
-        bounceAnimation.values = [1.0, 1.3, 0.9, 1.1, 1.0] // Bounce effect
-        bounceAnimation.keyTimes = [0, 0.2, 0.4, 0.6, 1] // Timings for each scale value
-        bounceAnimation.duration = 0.4 // Duration of the bounce
+        bounceAnimation.values = [1.0, 1.3, 0.9, 1.1, 1.0]
+        bounceAnimation.keyTimes = [0, 0.2, 0.4, 0.6, 1]
+        bounceAnimation.duration = 0.4 
         bounceAnimation.calculationMode = .cubic
         
         tabBarItemView.layer.add(bounceAnimation, forKey: "bounce")

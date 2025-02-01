@@ -227,11 +227,9 @@ struct DetailLoadView: View {
     private func assignDriverToLoad(driverId: String, loadId: String) {
         FirebaseManager.shared.addLoadToFirestore(loadItem: loadItem) { success in
             if success {
-                // If load is successfully added, now assign the driver
                 FirebaseManager.shared.assignDriverToLoad(loadId: loadId, driverId: driverId)
-                presentationMode.wrappedValue.dismiss()  // Close the details view after assignment
+                presentationMode.wrappedValue.dismiss()  
             } else {
-                // Handle the error, display an alert, or notify the user that the load couldn't be added
                 errorMessage = "Error adding load to Firestore"
             }
         }

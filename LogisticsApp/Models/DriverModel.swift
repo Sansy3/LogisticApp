@@ -22,7 +22,7 @@ struct TruckDimensions: Equatable {
     let width: Int
     
     var volumeInCubicMeters: Double {
-        Double(length * width * height) / 1_000_000 // Convert from cubic cm to cubic meters
+        Double(length * width * height) / 1_000_000 
     }
 }
 
