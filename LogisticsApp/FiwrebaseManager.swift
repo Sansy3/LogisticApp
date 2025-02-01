@@ -188,4 +188,22 @@ class FirebaseManager: FirebaseManagerProtocol {
                 completion(.success(firestoreLoads))
             }
     }
+    func fetchLoadsAssignedToDriver(driverId: String, completion: @escaping (Result<[FirestoreLoadItem], Error>) -> Void) {
+        let db = Firestore.firestore()
+        db.collection("loads")
+            .whereField("assignedDriverId", isEqualTo: driverId)
+            .getDocuments { (snapshot, error) in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    let loads = snapshot?.documents.compactMap { doc -> FirestoreLoadItem? in
+                        try? doc.data(as: FirestoreLoadItem.self)
+                    } ?? []
+                    completion(.success(loads))
+                }
+            }
+    }
+
+    
+    
 }

@@ -21,7 +21,7 @@ class DriverTabBarController: UITabBarController {
     private func setupViewControllers() {
         viewControllers = [
             createNavigationController(
-                for: MyShipmentsViewController(),
+                for: DriverShipmentsViewController(),
                 title: "My Shipments",
                 image: "tray.full"
             ),
